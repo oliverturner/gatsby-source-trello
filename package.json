@@ -1,33 +1,36 @@
 {
   "name": "gatsby-source-trello",
-  "version": "1.0.7",
   "description": "gatsby source plugin for trello",
-  "respository": {
-    "type": "git",
-    "url": "necmttn/gatsby-source-trello"
-  },
+  "version": "1.0.7",
+  "author": "Necmettin Karakaya",
+  "license": "ISC",
   "keywords": [
     "gatsby",
     "gatsby-plugin",
-    "trello",
     "source",
+    "trello",
     "trello-as-a-cms"
   ],
-  "main": "index.js",
-  "license": "MIT",
+  "main": "gatsby-node.js",
+  "repository": "https://github.com/Necmttn/gatsby-source-trello",
+  "dependencies": {
+    "@babel/cli": "7.0.0-beta.43",
+    "@babel/preset-env": "7.0.0-beta.43",
+    "axios": "0.18.0",
+    "cross-env": "^5.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.43",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.43",
+    "@babel/plugin-transform-runtime": "7.0.0-beta.43",
+    "babel-eslint": "8.2.2",
+    "eslint": "4.19.1",
+    "jest": "22.4.3"
+  },
   "scripts": {
-    "test": "jest --watch",
     "build": "babel src --out-dir . --ignore __tests__",
     "prepublish": "cross-env NODE_ENV=production npm run build",
+    "test": "jest --watch",
     "watch": "babel -w src --out-dir . --ignore __tests__"
-  },
-  "author": "Necmettin Karakaya",
-  "license": "ISC",
-  "dependencies": {
-    "babel-cli": "^6.26.0",
-    "cross-env": "^5.1.0",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.5"
   }
-
 }

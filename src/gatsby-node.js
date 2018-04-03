@@ -1,61 +1,52 @@
-const { TrelloSource } = require('./fetch.js');
-const crypto = require('crypto')
+const TrelloSource = require("./fetch.js");
+const crypto = require("crypto");
 
-let _verbose;
-let _apiKey;
-let _secret;
-let _teamId;
+export const getDigest = type => {
+  return crypto
+    .createHash(`md5`)
+    .update(JSON.stringify(type))
+    .digest(`hex`);
+};
 
-exports.sourceNodes = async (
+export const sourceNodes = async (
   { boundActionCreators },
-  {
-    apiKey,
-    secret,
-    teamId,
-    verboseOutput = false
-  }
+  { apiKey, secret, teamId, verboseOutput = false }
 ) => {
   const { createNode } = boundActionCreators;
-  _verbose = verboseOutput;
-  _apiKey = apiKey;
-  _secret = secret;
-  _teamId = teamId;
-  try {
-    const fetcher = new TrelloSource(_apiKey, _secret)
-    const raw = await fetcher.getTeam(_teamId)
-    const data = JSON.parse(raw)
-    const boardIDs = data.idBoards
+  const _verbose = verboseOutput;
+  const _apiKey = apiKey;
+  const _secret = secret;
+  const _teamId = teamId;
 
-    const promiseArray = []
+  try {
+    const fetcher = new TrelloSource(_apiKey, _secret);
+    const raw = await fetcher.getTeam(_teamId);
+    const data = JSON.parse(raw);
+    const boardIDs = data.idBoards;
+
+    const promiseArray = [];
 
     boardIDs.map(async id => {
-      promiseArray.push(fetcher.getBoards(id))
-    })
+      promiseArray.push(fetcher.getBoards(id));
+    });
 
-    await Promise.all(promiseArray).then(async (boards) => {
+    await Promise.all(promiseArray).then(async boards => {
       boards.map(rawBoard => {
-        const board = JSON.parse(rawBoard)
-        const cards = board.cards
-        const lists = board.lists
-        const boardDigest = crypto
-         .createHash(`md5`)
-         .update(JSON.stringify(board))
-         .digest(`hex`)
-        const boardNode = Object.assign(
-          board,
-          {
-            children: [],
-            parent: `root`,
-            lists___NODE: lists.map((list) => list.id),
-            internal: {
-              type: `TrelloBoard`,
-              contentDigest: boardDigest,
-            },
-          },
-        );
+        const board = JSON.parse(rawBoard);
+        const { cards, lists } = board;
+
+        const boardNode = Object.assign(board, {
+          children: [],
+          parent: `root`,
+          lists___NODE: lists.map(list => list.id),
+          internal: {
+            type: `TrelloBoard`,
+            contentDigest: getDigest(board)
+          }
+        });
+
         // Create Node for each Card
         cards.map(card => {
-          const cardDigest = crypto.createHash(`md5`).update(JSON.stringify(card)).digest(`hex`);
           const cardNode = Object.assign(card, {
             children: [],
             parent: `root`,
@@ -63,41 +54,38 @@ exports.sourceNodes = async (
               content: card.desc,
               mediaType: `text/markdown`,
               type: `TrelloCard`,
-              contentDigest: cardDigest
+              contentDigest: getDigest(card)
             }
           });
-          createNode(cardNode)
+
+          createNode(cardNode);
         });
+
         // Create Node for each list
         lists.map(list => {
-          const ownedCards = cards.filter(card => {
-            return card.idList === list.id
-          }).map(card => {
-            return card.id
-          })
-          const listDigest = crypto
-            .createHash(`md5`)
-            .update(JSON.stringify(list))
-            .digest(`hex`)
-          const listNode = Object.assign(
-            list,
-            {
-              children: [],
-              parent: `root`,
-              cards___NODE: ownedCards,
-              internal: {
-                type: `TrelloList`,
-                contentDigest: listDigest,
-              },
-            },
-          );
+          const ownedCards = cards
+            .filter(card => card.idList === list.id)
+            .map(card => card.id);
+
+          const listNode = Object.assign(list, {
+            children: [],
+            parent: `root`,
+            cards___NODE: ownedCards,
+            internal: {
+              type: `TrelloList`,
+              contentDigest: getDigest(list)
+            }
+          });
+
           createNode(listNode);
-        })
+        });
+
         createNode(boardNode);
-      })
-    })
+      });
+    });
   } catch (error) {
     console.error(error);
+    console.log(_verbose);
     process.exit(1);
   }
-}
+};

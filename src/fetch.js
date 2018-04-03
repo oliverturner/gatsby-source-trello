@@ -1,32 +1,29 @@
-const request = require('request-promise-native')
+const request = require("request-promise-native");
 
 class TrelloSource {
-  constructor(key, secret) {
-    if (typeof(key) !== 'string') console.error(`key should be string given is ${key}, type ${typeof(key)}`)
-    if (typeof(secret) !== 'string') console.error(`secret should be string given is ${key}, type ${typeof(key)}`)
-    this._key = key
-    this._secret = secret
-    this.TrelloBaseURL = 'https://api.trello.com/1'
+  constructor(key = "", token = "") {
+    if (key.length === 0) console.error(`key must be supplied`);
+    if (token.length === 0) console.error(`token must be supplied`);
+
+    this.credentials = `key=${key}&token=${token}`;
+    this.trelloURL = "https://api.trello.com/1";
   }
 
   async getBoards(id) {
-    const url = `${this.TrelloBaseURL}/boards/${id}?fields=all&lists=all&cards=all&key=${this._key}&token=${this._secret}`
-    const data = await request.get(url)
-    return data
+    const url = `${
+      this.trelloURL
+    }/boards/${id}?fields=all&lists=all&cards=all&${this.credentials}`;
+    const data = await request.get(url);
+
+    return data;
   }
 
+  async getTeam() {
+    const url = `${this.trelloURL}/members/me?fields=all&${this.credentials}`;
+    const data = await request.get(url);
 
-  async getTeam(id) {
-    const url = `${this.TrelloBaseURL}/organizations/${id}?fields=all&key=${this._key}&token=${this._secret}`
-    const data = await request.get(url)
-    return data
+    return data;
   }
-
 }
 
-
-
-module.exports = {
-  TrelloSource
-}
-
+export default TrelloSource;
