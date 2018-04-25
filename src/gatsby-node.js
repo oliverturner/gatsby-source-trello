@@ -1,5 +1,6 @@
-const TrelloSource = require("./fetch.js");
 const crypto = require("crypto");
+
+const Source = require("./trello-source.js");
 
 export const getDigest = type => {
   return crypto
@@ -10,29 +11,19 @@ export const getDigest = type => {
 
 export const sourceNodes = async (
   { boundActionCreators },
-  { apiKey, secret, teamId, verboseOutput = false }
+  { apiKey, secret, verboseOutput = false }
 ) => {
   const { createNode } = boundActionCreators;
-  const _verbose = verboseOutput;
-  const _apiKey = apiKey;
-  const _secret = secret;
-  const _teamId = teamId;
 
   try {
-    const fetcher = new TrelloSource(_apiKey, _secret);
-    const raw = await fetcher.getTeam(_teamId);
-    const data = JSON.parse(raw);
+    const source = new Source(apiKey, secret);
+    const data = await source.getTeam();
     const boardIDs = data.idBoards;
 
-    const promiseArray = [];
+    const promises = boardIDs.map(id => source.getBoard(id));
 
-    boardIDs.map(async id => {
-      promiseArray.push(fetcher.getBoards(id));
-    });
-
-    await Promise.all(promiseArray).then(async boards => {
-      boards.map(rawBoard => {
-        const board = JSON.parse(rawBoard);
+    Promise.all(promises).then(async boards => {
+      boards.map(board => {
         const { cards, lists } = board;
 
         const boardNode = Object.assign(board, {
@@ -85,7 +76,7 @@ export const sourceNodes = async (
     });
   } catch (error) {
     console.error(error);
-    console.log(_verbose);
+    console.log(verboseOutput);
     process.exit(1);
   }
 };
