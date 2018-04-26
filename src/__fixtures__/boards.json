@@ -1,0 +1,55 @@
+{
+  "id": "5a7af9037315f740f8b2e67e",
+  "avatarHash": "40d5e7f6bb95c059ecbe04125fba9dcb",
+  "avatarUrl":
+    "https://trello-avatars.s3.amazonaws.com/40d5e7f6bb95c059ecbe04125fba9dcb",
+  "bio": "I'm an account used to track changes to the Trello Radar",
+  "bioData": { "emoji": {} },
+  "confirmed": true,
+  "fullName": "tm-radar",
+  "idEnterprisesDeactivated": [],
+  "idPremOrgsAdmin": [],
+  "initials": "TMR",
+  "memberType": "normal",
+  "products": [],
+  "status": "disconnected",
+  "url": "https://trello.com/tmradar",
+  "username": "tmradar",
+  "avatarSource": "upload",
+  "email": "olly.turner+trello@gmail.com",
+  "gravatarHash": "75459590c3ca2743bd53e3f996080e51",
+  "idBoards": [
+    "58bffe965415a2a276e91a2f",
+    "56431976063102e6178fa3d4",
+    "58d842549c08fb9b13dba150",
+    "5aa7e0a4fa623ac86b86481e"
+  ],
+  "idEnterprise": null,
+  "idOrganizations": [],
+  "idEnterprisesAdmin": [],
+  "limits": {
+    "boards": {
+      "totalPerMember": { "status": "ok", "disableAt": 56050, "warnAt": 53100 }
+    },
+    "orgs": {
+      "totalPerMember": { "status": "ok", "disableAt": 808, "warnAt": 765 }
+    }
+  },
+  "loginTypes": ["password"],
+  "marketingOptIn": { "optedIn": true, "date": "2018-04-25T09:34:04.245Z" },
+  "messagesDismissed": [],
+  "oneTimeMessagesDismissed": ["OPEN_CARD_TIP"],
+  "prefs": {
+    "sendSummaries": true,
+    "minutesBetweenSummaries": 1,
+    "minutesBeforeDeadlineToNotify": 1440,
+    "colorBlind": false,
+    "locale": "en-GB"
+  },
+  "trophies": [],
+  "uploadedAvatarHash": "40d5e7f6bb95c059ecbe04125fba9dcb",
+  "uploadedAvatarUrl":
+    "https://trello-avatars.s3.amazonaws.com/40d5e7f6bb95c059ecbe04125fba9dcb",
+  "premiumFeatures": [],
+  "idBoardsPinned": null
+}
