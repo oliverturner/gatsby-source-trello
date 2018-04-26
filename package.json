@@ -46,9 +46,9 @@
   "scripts": {
     "lint": "eslint --fix ./src",
     "build": "babel src --out-dir . --ignore src/__tests__",
-    "precommit": "lint-staged",
-    "prepublish": "cross-env NODE_ENV=production npm run build",
     "test": "jest --watch",
-    "watch": "babel -w src --out-dir . --ignore src/__tests__"
+    "watch": "babel -w src --out-dir . --ignore src/__tests__",
+    "precommit": "lint-staged",
+    "prepublish": "cross-env NODE_ENV=production npm run build"
   }
 }
