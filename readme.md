@@ -9,12 +9,14 @@ Source plugin for pulling data into Gatsby from Trello using `team`.
 </p>
 
 ## Install
+
 ```
- npm install --save gatsby-source-trello
+ npm install --save @oliverturner/gatsby-source-trello
 ```
 
-## How to use 
-Use organization `id` or `name` for fetching data from the Trello API. 
+## How to use
+
+Use organization `id` or `name` for fetching data from the Trello API.
 
 ```
 // In your  gatsby-config.js
@@ -22,19 +24,19 @@ plugins: [
   {
     resolve: 'gatsby-source-trello',
     options: {
-      teamId: `your_team_id/name`,
-      apiKey: `your_trello_access_token`,
-      secret: `your_trello_secret`
+      apiKey: process.env.TRELLO_KEY,
+      apiToken: process.env.TRELLO_TOKEN
     }
   },
 ]
 ```
 
 ## How to query
-It creates 3 different nodes: `TrelloBoard` , `TrelloList`, `TrelloCard` 
+
+It creates 3 different nodes: `TrelloBoard` , `TrelloList`, `TrelloCard`
 
 #### Querying all boards
- 
+
 ```
 {
   allTrelloBoard {
@@ -49,6 +51,7 @@ It creates 3 different nodes: `TrelloBoard` , `TrelloList`, `TrelloCard`
 ```
 
 #### Querying all lists
+
 ```
 {
   allTrelloList {
@@ -62,7 +65,8 @@ It creates 3 different nodes: `TrelloBoard` , `TrelloList`, `TrelloCard`
 }
 ```
 
-#### Querying all cards 
+#### Querying all cards
+
 ```
 {
   allTrelloCard {

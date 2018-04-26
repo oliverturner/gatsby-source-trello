@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 
-const Source = require("./trello-source.js");
+const TrelloSource = require("./trello-source.js");
 
 export const getDigest = type => {
   return crypto
@@ -11,13 +11,13 @@ export const getDigest = type => {
 
 export const sourceNodes = async (
   { boundActionCreators },
-  { apiKey, secret, verboseOutput = false }
+  { apiKey, apiToken, verboseOutput = false }
 ) => {
   const { createNode } = boundActionCreators;
 
   try {
-    const source = new Source(apiKey, secret);
-    const data = await source.getTeam();
+    const source = new TrelloSource(apiKey, apiToken);
+    const { data } = await source.getTeam();
     const boardIDs = data.idBoards;
 
     const promises = boardIDs.map(id => source.getBoard(id));

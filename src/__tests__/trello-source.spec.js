@@ -1,12 +1,34 @@
-import Source from "../trello-source.js";
+require("dotenv").config();
 
-const key = "cfa0774bfdd74abfa19a9ebce9f20f06";
-const token =
-  "4fcc400e6eb95da4d37ad69d5a1ce9ca3dbc10020d141cd1133f6422c8dadde8";
-const source = new Source(key, token);
+import TrelloSource from "../trello-source.js";
 
 describe("Source", () => {
-  it("fetches stuff", () => {
-    expect(true).toBe(true)
-  })
-})
+  it("warns on missing config", () => {
+    let outputData = "";
+    const storeLog = inputs => (outputData += inputs);
+    console["error"] = jest.fn(storeLog);
+    new TrelloSource();
+    expect(outputData).toBe(`missing "key"missing "token"`);
+  });
+
+  it("fetches member boards", async () => {
+    const src = new TrelloSource(
+      process.env.TRELLO_KEY,
+      process.env.TRELLO_TOKEN
+    );
+    const team = await src.getBoards();
+    // console.log("team", team.data);
+    expect(true).toBe(true);
+  });
+
+  it("fetches board", async () => {
+    const src = new TrelloSource(
+      process.env.TRELLO_KEY,
+      process.env.TRELLO_TOKEN
+    );
+    const boardId = "58bffe965415a2a276e91a2f"
+    const board = await src.getBoard(boardId);
+    // console.log("board", board.data);
+    expect(true).toBe(true);
+  });
+});
